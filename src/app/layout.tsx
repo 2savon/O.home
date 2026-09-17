@@ -51,6 +51,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <head>
+        {/* 웨일·크롬의 「웹 콘텐츠 다크 모드」(강제 어둡게)가 페이지를 다시 칠하지 않게 (v2.0 사용자 제보).
+            CSS의 color-scheme과 같은 선언인데, 스타일 로드 전 첫 페인트부터 적용되도록 메타로도 둔다 */}
+        <meta name="color-scheme" content="only light" />
         {/* 테마 FOUC 방지 — <body> 안에 있으면 body 배경이 :root의 다크 기본값으로 먼저 페인트될 여지가
             있다(사용자 발견 — "처음 접속할 때 기본 다크모드가 깜빡") — body 자체가 파싱되는 순간 CSS만으로도
             그려질 수 있기 때문. <head> 맨 앞으로 옮겨 렌더 차단 구간(첫 페인트 전) 안에서 먼저 실행되게 한다 (v2.0) */}
