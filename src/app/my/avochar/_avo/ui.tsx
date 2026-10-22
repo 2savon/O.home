@@ -277,7 +277,7 @@ export function CropModal({ req, onDone }: { req: CropReq | null; onDone: () => 
             {RATIOS.map(r => <button key={r || 'free'} type="button" className={`avo-btn avo-btn-s ${ratio === r ? 'avo-btn-pri' : ''}`} onClick={() => setRatio(r)}>{r || '자유'}</button>)}
           </div>
           <div className="avo-crop-row"><span className="avo-lbl">긴 변 최대</span>
-            {[600, 1200, 2000, 2400].map(n => <button key={n} type="button" className={`avo-btn avo-btn-s ${maxPx === n ? 'avo-btn-pri' : ''}`} onClick={() => setMaxPx(n)}>{n}px</button>)}
+            {Array.from(new Set([req.max ?? 0, 600, 1200, 2000, 2400])).filter(n => n > 0).sort((a, b) => a - b).map(n => <button key={n} type="button" className={`avo-btn avo-btn-s ${maxPx === n ? 'avo-btn-pri' : ''}`} onClick={() => setMaxPx(n)}>{n}px</button>)}
             <span className="avo-sp" />
             <button type="button" className="avo-btn avo-btn-s" onClick={() => setRot(r => (r + 90) % 360)}>↻ 회전</button>
             <button type="button" className="avo-btn avo-btn-s" onClick={() => setFlip(f => !f)}>⇋ 좌우반전</button>

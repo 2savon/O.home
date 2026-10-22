@@ -460,7 +460,7 @@ a.avo-rel:hover .avo-rel-img { transform: translateY(-2px); }
 .avo-write.is-frame { padding: 22px 24px 4px; }
 
 /* 이미지 자르기 편집기 */
-.avo-crop-modal { z-index: 89; padding: 10px; }
+.avo-crop-modal { z-index: 95; padding: 10px; } /* O.home 모달(90) 위에서도 열리게 */
 /* 버튼 영역은 항상 보이고, 남는 높이만 이미지 영역이 차지 */
 .avo-crop-box { position: relative; display: flex; flex-direction: column; width: 100%; max-width: 900px; height: 100%; max-height: 760px; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
 .avo-crop-head, .avo-crop-ctrl, .avo-crop-btns { flex: none; }
@@ -671,7 +671,7 @@ a.avo-rel:hover .avo-rel-img { transform: translateY(-2px); }
 /* =========================================================
    O.home 이식판 추가분
    ========================================================= */
-.avo-wrap, .avo-modal { --avo-accent: var(--avo-site, #6f9a4c); }
+.avo-wrap, .avo-modal { --avo-accent: var(--avo-site, var(--accent, #6f9a4c)); }
 /* 목록·글 화면은 O.home 패널 색 (어두운 홈 배경 위에서도 또렷하게) · 캐릭터 페이지는 원본대로 반투명 */
 .avo-page > .avo-wrap:not(.avo-cv) { --avo-panel: var(--panel, rgba(252,252,253,.94)); }
 .avo-wrap .k-input, .avo-modal .k-input, .avo-wrap .k-textarea, .avo-modal .k-textarea { width: 100%; }
