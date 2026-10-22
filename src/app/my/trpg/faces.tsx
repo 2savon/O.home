@@ -162,6 +162,6 @@ export const FACES_CSS = `
 .mt-fe-row .btn{padding:5px 9px;font-size:11px;flex:none}
 .mt-fe-add{justify-self:start;padding:6px 12px;font-size:11.5px}
 .mt-fe-help{margin:0;font-size:11px;color:var(--faint,#9aa0a9)}
-.mt-face-btn{position:absolute;right:12px;top:12px;z-index:5;padding:4px 10px;font-size:11px;opacity:.55;transition:opacity .15s}
+.mt-face-btn{position:absolute;right:12px;top:12px;z-index:5;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;border-radius:50%;font-size:15px;line-height:1;opacity:.55;transition:opacity .15s}
 .ticket:hover .mt-face-btn{opacity:1}
 `;

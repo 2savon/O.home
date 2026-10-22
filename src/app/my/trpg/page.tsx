@@ -259,8 +259,9 @@ function TrpgPageInner() {
       <div className="stub-line" />
       {/* 얼굴 편집 (개인화 · 관리자) */}
       {isAdmin && (
-        <button className="btn btn-ghost mt-face-btn" onClick={e => { e.stopPropagation(); setFaceFor({ id: l.id, faces: facesOfLog(l) }); }}>
-          ☺ 얼굴
+        <button className="btn btn-ghost mt-face-btn" title="참여 인물 얼굴 편집" aria-label="참여 인물 얼굴 편집"
+          onClick={e => { e.stopPropagation(); setFaceFor({ id: l.id, faces: facesOfLog(l) }); }}>
+          ☺
         </button>
       )}
       <div className={`wide ${!l.thumbId && !l.thumbColor ? `ph ${l.ph}` : ''}`} style={thumbStyle(l)}>
