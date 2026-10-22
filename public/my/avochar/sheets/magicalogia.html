@@ -1,0 +1,359 @@
+<meta name="avo-sheet" content='{"id":"magicalogia","name":"마도서대전 TRPG 마기카로기아","width":820,"order":3}'>
+<!--
+  아보카도 TRPG 시트 : 마기카로기아 (v1.8 디자인 · 크툴루의 부름 7판 시트와 같은 디자인)
+  - 특기를 클릭하면 습득 표시(○), 모든 특기의 목표치가 자동 계산됩니다 (습득 특기 5, 한 칸 멀어질 때마다 +1, 최대 12)
+  - 분야 사이 갭(머리줄의 작은 ○)을 칠하면 그 사이 거리가 1 줄어듭니다. 특기표의 좌우 끝(어둠-별)은 이어져 있어요
+  - 장서의 지정특기에 특기 이름을 적으면 목표치가 옆에 표시됩니다
+  - 입력 키(data-k)는 예전 시트와 같아서 저장해 둔 값이 그대로 보여요
+-->
+<style>
+:root {
+    --accent: #6f9a4c; --ink: #26262b; --sub: #8b8b93; --line: #e6e4ea; --soft: #f7f6f9;
+    --tint: rgba(111,154,76,.08); --tint2: rgba(111,154,76,.16); --tint3: rgba(111,154,76,.32);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #fff; color: var(--ink); font: 12px/1.45 "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; -webkit-font-smoothing: antialiased; }
+.sheet { width: 820px; overflow: hidden; background: #fff; }
+input, select, textarea { font: inherit; color: inherit; }
+input:disabled, select:disabled, textarea:disabled { opacity: 1; -webkit-text-fill-color: var(--ink); color: var(--ink); }
+.is-view ::placeholder { color: transparent; -webkit-text-fill-color: transparent; }
+.is-view select { -webkit-appearance: none; appearance: none; }
+.is-view select.empty { -webkit-text-fill-color: transparent; color: transparent; }
+.is-view input[type=number] { -moz-appearance: textfield; }
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+table { font-size: inherit; }
+
+
+/* ───────── 헤더 ───────── */
+.hd { position: relative; height: 136px; padding: 20px 26px 0; background: var(--accent) center / cover no-repeat; color: #fff; overflow: hidden; }
+.hd::before { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 1; background:
+    radial-gradient(120% 140% at 100% 0%, rgba(255,255,255,.22), transparent 55%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 1px, transparent 1px 9px); }
+.hd.has-img::before { background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.15) 65%, rgba(0,0,0,0)); }
+.hd > * { position: relative; z-index: 2; }
+.hd-top { display: flex; align-items: center; gap: 8px; }
+.tag { display: inline-flex; align-items: center; height: 22px; padding: 0 11px; border-radius: 99px; background: rgba(255,255,255,.95); color: var(--accent); font-size: 11px; font-weight: 900; letter-spacing: .14em; }
+.tag-sub { font-size: 10px; font-weight: 700; letter-spacing: .28em; opacity: .85; }
+.nm { margin: 10px 0 0; font-size: 36px; font-weight: 800; line-height: 1.08; letter-spacing: -.01em; text-shadow: 0 2px 10px rgba(0,0,0,.18); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sub { margin-top: 3px; font-size: 14px; font-weight: 600; letter-spacing: .04em; opacity: .92; }
+.hd-mark { position: absolute; right: 22px; bottom: -18px; z-index: 0; font-size: 96px; font-weight: 900; letter-spacing: -.04em; color: rgba(255,255,255,.12); pointer-events: none; }
+.hd.has-img .hd-mark { display: none; }
+
+/* ───────── 상단 : 두상 · 정보 · 능력 ───────── */
+.top { display: grid; grid-template-columns: 200px 1fr; }
+.side { border-right: 1px solid var(--line); background: var(--soft); }
+.pt { position: relative; height: 252px; background: var(--tint2) center top / cover no-repeat; }
+.pt:not(.has-img)::before { content: "PORTRAIT"; position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .3em; opacity: .5; }
+.info { padding: 10px 12px 12px; }
+.info label { display: block; margin-bottom: 7px; }
+.info label:last-child { margin-bottom: 0; }
+.info .k { display: block; margin: 0 0 2px 2px; color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+.info .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.f { width: 100%; height: 27px; padding: 0 9px; border: 1px solid var(--line); border-radius: 7px; background: #fff; font-weight: 600; }
+textarea.f { height: auto; padding: 5px 9px; resize: none; overflow: hidden; line-height: 1.5; font-weight: 500; }
+.is-view .f { border-color: transparent; background: transparent; padding-left: 2px; }
+.is-view textarea.f { padding-left: 9px; background: var(--tint); }
+
+.main { display: flex; flex-direction: column; min-width: 0; }
+.stat { flex: 1; display: grid; grid-template-columns: 236px 1fr; }
+.sec-t { display: flex; align-items: center; gap: 6px; margin: 0 0 10px; color: var(--accent); font-size: 10px; font-weight: 900; letter-spacing: .26em; }
+.sec-t::after { content: ""; flex: 1; height: 1px; background: var(--tint3); }
+.vit { display: flex; flex-direction: column; padding: 14px 16px 12px 18px; border-right: 1px solid var(--line); }
+.lb { display: inline-flex; align-items: center; justify-content: center; height: 24px; padding: 0 8px; border-radius: 7px; background: var(--tint2); color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .02em; white-space: nowrap; }
+.vrow { display: grid; grid-template-columns: 44px 1fr; align-items: center; gap: 6px; margin-bottom: 8px; }
+.lvbox { display: flex; align-items: center; justify-content: space-between; margin: 2px 0 10px; padding: 7px 10px 7px 12px; border-radius: 11px; background: var(--accent); color: #fff; }
+.lvbox span { font-size: 12px; font-weight: 800; letter-spacing: .1em; }
+.lvbox span small { margin-left: 4px; font-size: 9px; letter-spacing: .2em; opacity: .75; }
+.ov { width: 100%; height: 30px; padding: 0; border: 1.5px solid var(--tint3); border-radius: 9px; background: #fff; text-align: center; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.lvbox .ov { width: 64px; border-color: transparent; color: var(--accent); font-size: 17px; }
+.is-view .lvbox .ov { -webkit-text-fill-color: var(--accent); }
+.is-view .ov { border-color: transparent; background: var(--tint); }
+.is-view .lvbox .ov { background: #fff; }
+.pw { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.cbox { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 7px 4px 6px; border-radius: 11px; background: var(--tint); }
+.cbox .cn { color: var(--accent); font-size: 11px; font-weight: 800; }
+.cbox .ov { width: 54px; height: 30px; font-size: 17px; }
+.is-view .cbox .ov { background: #fff; }
+.tr { display: flex; flex-direction: column; gap: 4px; padding: 14px 18px 12px 16px; }
+.tr .hdl { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.tr .hdl:first-of-type { margin-top: 0; }
+.tr textarea { min-height: 28px; }
+.deco { position: relative; height: 104px; background: var(--accent) center / cover no-repeat; }
+.deco:not(.has-img) { background-image: radial-gradient(circle at 20% 120%, rgba(255,255,255,.25), transparent 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.1) 0 1px, transparent 1px 10px); }
+.deco:not(.has-img)::after { content: "✦  MAGICALOGIA  ✦"; position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.55); font-size: 11px; font-weight: 800; letter-spacing: .5em; }
+
+/* ───────── 섹션 제목 ───────── */
+.sec { display: flex; align-items: center; gap: 14px; padding: 16px 22px 12px; }
+.sec::before, .sec::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--tint3)); }
+.sec::after { background: linear-gradient(90deg, var(--tint3), transparent); }
+.sec span { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.sec b { color: var(--ink); font-size: 16px; font-weight: 800; letter-spacing: .18em; }
+.sec small { color: var(--accent); font-size: 9px; font-weight: 800; letter-spacing: .3em; }
+
+/* 동그라미 체크 */
+.ck { appearance: none; -webkit-appearance: none; flex: none; width: 13px; height: 13px; margin: 0; border: 1.5px solid #c9c7cf; border-radius: 50%; vertical-align: middle; cursor: pointer; background: #fff; }
+.ck:checked { background: radial-gradient(circle, var(--accent) 42%, #fff 48%); border-color: var(--accent); }
+.is-view .ck:not(:checked) { border-color: #e2e0e6; }
+.is-view .ck { cursor: default; }
+
+/* ───────── 특기표 ───────── */
+.spw { padding: 0 14px; }
+.sp { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.sp thead th { height: 28px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .04em; }
+.sp thead th:first-child { border-radius: 8px 0 0 8px; }
+.sp thead th:last-child { border-radius: 0 8px 8px 0; }
+.sp .gap { width: 14px; padding: 0; text-align: center; }
+.sp th.gap .ck { width: 10px; height: 10px; border-color: rgba(255,255,255,.8); background: transparent; }
+.sp th.gap .ck:checked { background: #fff; border-color: #fff; }
+.sp td.gap { border-bottom: 1px solid var(--line); }
+.sp td.gap.on { background: var(--tint3); }
+.sp tbody th { border-bottom: 1px solid var(--line); background: var(--tint); color: var(--accent); font-size: 11px; font-weight: 800; }
+.sp tbody tr:nth-child(even) td.c { background: var(--soft); }
+.sp td.c { height: 27px; padding: 0 5px; border-bottom: 1px solid var(--line); }
+.sp td.c label { display: flex; align-items: center; gap: 5px; height: 100%; cursor: pointer; }
+.is-view .sp td.c label { cursor: default; }
+.sp td.c span { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-weight: 600; }
+.sp td.c b { flex: none; min-width: 16px; color: var(--sub); font-size: 11px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+.sp tbody tr td.c.on { background: var(--tint2); }
+.sp td.c.on span { color: var(--accent); font-weight: 800; }
+.sp td.c.on b { display: inline-block; padding: 0 5px; border-radius: 99px; background: var(--accent); color: #fff; }
+.soul { display: flex; align-items: center; gap: 10px; margin: 10px 14px 0; padding: 8px 12px 8px 16px; border-radius: 11px; background: var(--accent); color: #fff; }
+.soul .k { font-weight: 800; letter-spacing: .1em; }
+.soul .f { width: 190px; border-color: transparent; color: var(--ink); }
+.is-view .soul .f { background: rgba(255,255,255,.95); -webkit-text-fill-color: var(--accent); color: var(--accent); font-weight: 800; padding-left: 9px; }
+.soul .tv { display: flex; align-items: center; gap: 6px; margin-left: auto; padding: 2px 4px 2px 12px; border-radius: 99px; background: rgba(255,255,255,.2); font-size: 11px; font-weight: 700; }
+.soul .tvi { width: 38px; height: 22px; padding: 0; border: 0; border-radius: 99px; background: #fff; color: var(--accent); -webkit-text-fill-color: var(--accent); text-align: center; font-size: 12px; font-weight: 800; }
+.soul .tvi::placeholder { color: var(--accent); -webkit-text-fill-color: var(--accent); opacity: .55; }
+
+/* ───────── 장서 · 관계 (카드) ───────── */
+.lst { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 14px 14px; }
+.lst > div { padding: 10px 12px; border-radius: 11px; background: var(--soft); box-shadow: inset 0 0 0 1px var(--line); }
+.is-view .lst > div.none { display: none; }
+.bk .l1 { display: grid; grid-template-columns: 1fr 64px 88px 34px; gap: 4px; align-items: center; }
+.bk .l2 { display: grid; grid-template-columns: auto 1fr auto 1.4fr; gap: 4px 8px; align-items: center; margin-top: 4px; color: var(--sub); font-size: 10px; letter-spacing: .03em; }
+.bk .l2 span { color: var(--accent); font-weight: 800; }
+.bk textarea { margin-top: 5px; min-height: 34px; font-size: 11px; }
+.bk .nmf { font-weight: 800; }
+.bk select.f { padding: 0 4px; }
+.tg { display: flex; align-items: center; justify-content: center; height: 26px; border-radius: 8px; background: var(--accent); color: #fff; font-weight: 800; font-size: 13px; font-variant-numeric: tabular-nums; }
+.tg:empty { background: var(--tint2); }
+.tg:empty::before { content: "–"; color: var(--accent); font-weight: 400; opacity: .6; }
+.n { width: 100%; height: 26px; padding: 0 2px; border: 1px solid var(--line); border-radius: 7px; text-align: center; background: #fff; font-weight: 800; }
+.is-view .n { border-color: transparent; background: var(--tint2); color: var(--accent); -webkit-text-fill-color: var(--accent); }
+.rl > div { display: grid; grid-template-columns: 1fr auto 44px auto 92px; gap: 5px 6px; align-items: center; }
+.rl .cap { color: var(--accent); font-size: 10px; font-weight: 800; white-space: nowrap; }
+.rl .s { grid-column: 3 / -1; }
+.rl .cap.st { grid-column: 2; align-self: start; padding-top: 6px; }
+.rl textarea.f { min-height: 26px; padding: 3px 8px; }
+.hl { display: block; }
+.hl .f { border-color: transparent; background: var(--tint2); color: var(--accent); -webkit-text-fill-color: var(--accent); font-weight: 800; padding: 0 10px; }
+.is-view .hl .f { background: var(--tint2); padding-left: 10px; }
+.hl .f::placeholder { color: var(--accent); opacity: .5; }
+
+.bk .f.subnote { margin-top: 4px; min-height: 24px !important; padding: 3px 8px; font-size: 10.5px; line-height: 1.45; color: var(--sub); -webkit-text-fill-color: var(--sub); }
+.is-view .bk .f.subnote { background: transparent; border-left: 2px solid var(--tint3); border-radius: 0; padding-left: 8px; }
+
+/* 편집 모드 : 이미지 변경 버튼 */
+.avo-img-edit { cursor: default; }
+.avo-img-bar { position: absolute; right: 8px; bottom: 8px; left: 8px; z-index: 3; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; align-items: center; }
+.avo-img-bar button { padding: 4px 10px; border: 0; border-radius: 99px; background: rgba(20,20,24,.66); color: #fff; font: inherit; font-size: 10px; font-weight: 700; white-space: nowrap; cursor: pointer; }
+.avo-img-bar button:hover { background: rgba(20,20,24,.85); }
+.avo-img-bar small { order: -1; flex-basis: 100%; text-align: right; color: #fff; font-size: 9px; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+.is-edit .f:focus, .is-edit .n:focus, .is-edit .ov:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--tint2); }
+</style>
+
+<div class="sheet">
+    <header class="hd" data-img="header" data-ratio="" data-max="1600" data-hint="권장 820×136">
+        <div class="hd-top"><span class="tag">MGLG</span><span class="tag-sub">MAGICALOGIA</span></div>
+        <div class="nm" data-ctx="name"></div>
+        <div class="sub" data-ctx="nameSub"></div>
+        <div class="hd-mark" aria-hidden="true">MGLG</div>
+    </header>
+
+    <div class="top">
+        <div class="side">
+            <div class="pt" data-img="portrait" data-fallback="thumb" data-ratio="3:4" data-max="600" data-hint="권장 600×800"></div>
+            <div class="info">
+                <label><span class="k">마법명</span><input class="f" data-k="temp_name"></label>
+                <label><span class="k">사회적 신분</span><input class="f" data-k="cover"></label>
+                <div class="pair">
+                    <label><span class="k">성별</span><input class="f" data-k="gender"></label>
+                    <label><span class="k">연령</span><input class="f" data-k="age"></label>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="stat">
+                <div class="vit">
+                    <div class="sec-t">STATUS</div>
+                    <div class="vrow"><b class="lb">경력</b><input class="f" data-k="clan"></div>
+                    <div class="vrow"><b class="lb">기관</b><input class="f" data-k="rank"></div>
+                    <label class="lvbox"><span>계제<small>LEVEL</small></span><input class="ov" type="number" inputmode="numeric" min="0" max="10" data-k="lev"></label>
+                    <div class="pw">
+                        <label class="cbox"><span class="cn">공격력</span><input class="ov" type="number" inputmode="numeric" min="0" data-k="atk"></label>
+                        <label class="cbox"><span class="cn">방어력</span><input class="ov" type="number" inputmode="numeric" min="0" data-k="def"></label>
+                        <label class="cbox"><span class="cn">근원력</span><input class="ov" type="number" inputmode="numeric" min="0" data-k="bas"></label>
+                    </div>
+                </div>
+                <div class="tr">
+                    <div class="sec-t">TRUE FORM</div>
+                    <div class="hdl"><b class="lb">진정한 모습</b></div>
+                    <textarea class="f" rows="2" data-k="innerface"></textarea>
+                    <div class="hdl"><b class="lb">효과</b></div>
+                    <textarea class="f" rows="2" data-k="effect"></textarea>
+                    <div class="hdl"><b class="lb">마도서</b></div>
+                    <textarea class="f" rows="1" data-k="grimoire"></textarea>
+                </div>
+            </div>
+            <div class="deco" data-img="deco" data-pixel="5" data-ratio="" data-max="1600" data-hint="권장 620×104"></div>
+        </div>
+    </div>
+
+    <div class="sec"><span><b>특기 리스트</b><small>SKILL LIST</small></span></div>
+    <div class="spw"><table class="sp" id="sp"></table></div>
+    <div class="soul"><span class="k">혼의 특기</span><input class="f" data-k="Soul" placeholder="직접 입력"><label class="tv">목표치 <input class="tvi" inputmode="numeric" data-k="Soul_tv" placeholder="6"></label></div>
+
+    <div class="sec"><span><b>장서</b><small>GRIMOIRE</small></span></div>
+    <div class="lst" id="bk"></div>
+
+    <div class="sec"><span><b>관계</b><small>ANCHOR</small></span></div>
+    <div class="lst rl" id="rl"></div>
+    <datalist id="skl"></datalist>
+</div>
+
+<script>
+(function () {
+    var CATS = ['1.별', '2.짐승', '3.힘', '4.노래', '5.꿈', '6.어둠'];
+    var COL = 'ABCDEF';
+    var GAP = ['chk_A', 'chk_B', 'chk_C', 'chk_D', 'chk_E', 'chk_Z']; // GAP[i] = i번 분야와 그 오른쪽 분야 사이 (마지막은 어둠-별)
+    var SK = [
+        ['황금','살','중력','이야기','추억','심연'], ['대지','벌레','바람','선율','수수께끼','부패'], ['숲','꽃','흐름','눈물','거짓','배신'],
+        ['길','피','물','이별','불안','방황'], ['바다','비늘','파문','미소','잠','나태'], ['정적','혼돈','자유','마음','우연','왜곡'],
+        ['비','이빨','충격','승리','환각','불행'], ['폭풍','외침','우레','사랑','광기','바보'], ['태양','분노','불','정열','기도','악의'],
+        ['천공','날개','빛','치유','희망','절망'], ['이계','에로스','원환','시간','미래','죽음']
+    ];
+    var BOOKS = 10, ANCHORS = 10;
+    function $(id) { return document.getElementById(id); }
+    function pad(i) { return i < 10 ? '0' + i : '' + i; }
+    function gapCk(i) { return '<th class="gap"><input type="checkbox" class="ck" data-k="' + GAP[i] + '" title="갭"></th>'; }
+
+    // 특기표 : 번호 | 갭(어둠-별) | 별 | 갭 | 짐승 | … | 어둠
+    var h = '<colgroup><col style="width:34px"><col style="width:14px">';
+    for (var c = 0; c < 6; c++) h += '<col>' + (c < 5 ? '<col style="width:14px">' : '');
+    h += '</colgroup><thead><tr><th class="no"></th>' + gapCk(5);
+    for (c = 0; c < 6; c++) h += '<th>' + CATS[c] + '</th>' + (c < 5 ? gapCk(c) : '');
+    h += '</tr></thead><tbody>';
+    for (var r = 0; r < 11; r++) {
+        h += '<tr><th>' + (r + 2) + '</th><td class="gap" data-g="5"></td>';
+        for (c = 0; c < 6; c++) {
+            var id = COL[c] + (r + 2);
+            h += '<td class="c" id="c_' + id + '"><label><input type="checkbox" class="ck" data-k="' + id + '"><span>' + SK[r][c] + '</span><b id="v_' + id + '"></b></label></td>'
+                + (c < 5 ? '<td class="gap" data-g="' + c + '"></td>' : '');
+        }
+        h += '</tr>';
+    }
+    $('sp').innerHTML = h + '</tbody>';
+
+    // 지정특기 자동완성 목록
+    // 1열(별) 위→아래, 2열(짐승) 위→아래 … 순서 · 열마다 영역명을 먼저
+    var dl = '';
+    for (var dc = 0; dc < 6; dc++) {
+        dl += '<option value="' + CATS[dc].replace(/^\d+\./, '') + '">';
+        for (var dr = 0; dr < 11; dr++) dl += '<option value="' + SK[dr][dc] + '">';
+    }
+    dl += '<option value="가변">';
+    $('skl').innerHTML = dl;
+
+
+    // 장서
+    var bk = '';
+    for (var i = 1; i <= BOOKS; i++) {
+        var p = 'Magic_' + pad(i) + '_';
+        bk += '<div class="bk"><div class="l1">'
+            + '<input class="f nmf" data-k="' + p + 'Name" placeholder="장서명">'
+            + '<select class="f" data-k="' + p + 'Types"><option value="">타입</option><option>소환</option><option>주문</option><option>장비</option></select>'
+            + '<input class="f" data-k="' + p + 'Assigned_Skill" list="skl" placeholder="지정특기">'
+            + '<span class="tg" id="bt_' + i + '" title="목표치"></span></div>'
+            + '<div class="l2"><span>COST</span><input class="f" data-k="' + p + 'Cost" placeholder="-">'
+            + '<span>목표</span><input class="f" data-k="' + p + 'skillTarget" placeholder="없음"></div>'
+            + '<textarea class="f" rows="2" data-k="' + p + 'Effect" placeholder="효과"></textarea>'
+            + '<textarea class="f subnote" rows="1" data-k="' + p + 'Chant" placeholder="주구"></textarea>'
+            + '<textarea class="f subnote" rows="1" data-k="' + p + 'Summary" placeholder="개요"></textarea></div>';
+    }
+    $('bk').innerHTML = bk;
+
+    // 관계
+    var rl = '';
+    for (i = 1; i <= ANCHORS; i++) {
+        rl += '<div><span class="hl"><input class="f" data-k="relation_name_' + pad(i) + '" placeholder="앵커 이름"></span>'
+            + '<span class="cap">운명점</span><input class="n" type="number" inputmode="numeric" min="0" data-k="relation_fate_' + pad(i) + '">'
+            + '<span class="cap">속성</span><input class="f" data-k="relation_link_' + pad(i) + '">'
+            + '<span class="cap st">설정</span><textarea class="f s" rows="1" data-k="relation_' + pad(i) + '"></textarea></div>';
+    }
+    $('rl').innerHTML = rl;
+
+    // ----- 목표치 계산 -----
+    var S = window.AvoSheet;
+    // 캐릭터 테마 컬러로 옅은 색(--tint) 만들기
+    function tints() {
+        var c = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        var m = c.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i), r, g, b;
+        if (m) {
+            var hx = m[1].length === 3 ? m[1].replace(/./g, '$&$&') : m[1];
+            r = parseInt(hx.substr(0, 2), 16); g = parseInt(hx.substr(2, 2), 16); b = parseInt(hx.substr(4, 2), 16);
+        } else if ((m = c.match(/(\d+)\D+(\d+)\D+(\d+)/))) { r = +m[1]; g = +m[2]; b = +m[3]; } else return;
+        var st = document.documentElement.style;
+        st.setProperty('--tint', 'rgba(' + r + ',' + g + ',' + b + ',.08)');
+        st.setProperty('--tint2', 'rgba(' + r + ',' + g + ',' + b + ',.15)');
+        st.setProperty('--tint3', 'rgba(' + r + ',' + g + ',' + b + ',.35)');
+    }
+    S.onInit(tints);
+    function on(k) { var v = S.get(k); return !!v && v !== '0'; }
+    function calc() {
+        var step = [], total = 0;
+        for (var c = 0; c < 6; c++) { step[c] = on(GAP[c]) ? 1 : 2; total += step[c]; }
+        function hdist(a, b) {               // 분야 a → b 가로 거리 (좌우 끝 이어짐)
+            var d = 0; for (var x = a; x !== b; x = (x + 1) % 6) d += step[x];
+            return Math.min(d, total - d);
+        }
+        var got = [];
+        for (var r = 0; r < 11; r++) for (c = 0; c < 6; c++) if (on(COL[c] + (r + 2))) got.push([r, c]);
+        var tv = {};
+        for (r = 0; r < 11; r++) for (c = 0; c < 6; c++) {
+            var id = COL[c] + (r + 2), best = '';
+            got.forEach(function (g) {
+                var t = 5 + Math.abs(g[0] - r) + hdist(g[1], c);
+                if (best === '' || t < best) best = t;
+            });
+            if (best !== '' && best > 12) best = 12;
+            tv[SK[r][c]] = best;
+            $('v_' + id).textContent = best;
+            $('c_' + id).classList.toggle('on', on(id));
+        }
+        Array.prototype.forEach.call(document.querySelectorAll('td.gap'), function (td) {
+            td.classList.toggle('on', on(GAP[+td.getAttribute('data-g')]));
+        });
+        Array.prototype.forEach.call(document.querySelectorAll('select[data-k]'), function (el) { el.classList.toggle('empty', !el.value); });
+        var soul = String(S.get('Soul') || '').trim();
+        var soulTv = parseInt(S.get('Soul_tv'), 10); if (isNaN(soulTv)) soulTv = 6; // 혼의 특기 목표치 (직접 입력, 비우면 6)
+        if (soul && (tv[soul] === undefined || tv[soul] === '' || tv[soul] > soulTv)) tv[soul] = soulTv;
+        for (var i = 1; i <= BOOKS; i++) {
+            var sk = String(S.get('Magic_' + pad(i) + '_Assigned_Skill') || '').trim();
+            $('bt_' + i).textContent = sk && tv[sk] !== undefined ? tv[sk] : '';
+            $('bt_' + i).parentNode.parentNode.classList.toggle('none', !S.get('Magic_' + pad(i) + '_Name') && !S.get('Magic_' + pad(i) + '_Effect'));
+        }
+        // 보기 모드에서는 비어 있는 장서·관계 칸을 숨김
+        for (i = 1; i <= ANCHORS; i++) {
+            var el = document.querySelector('[data-k="relation_name_' + pad(i) + '"]');
+            el.parentNode.parentNode.classList.toggle('none', !S.get('relation_name_' + pad(i)) && !S.get('relation_' + pad(i)));
+        }
+    }
+    // 설명칸 높이를 내용에 맞춤
+    function fit(t) { t.style.height = 'auto'; t.style.height = (t.scrollHeight + 2) + 'px'; }
+    function fitAll() { Array.prototype.forEach.call(document.querySelectorAll('textarea'), fit); }
+    document.addEventListener('input', function (e) { if (e.target.tagName === 'TEXTAREA') fit(e.target); });
+    S.onInit(function () { fitAll(); setTimeout(fitAll, 300); });
+    window.addEventListener('load', fitAll);
+    S.onChange(calc);
+})();
+</script>

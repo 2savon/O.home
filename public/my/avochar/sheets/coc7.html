@@ -1,0 +1,306 @@
+<meta name="avo-sheet" content='{"id":"coc7","name":"크툴루의 부름 7판","width":820,"order":1}'>
+<!--
+  아보카도 TRPG 시트 : 크툴루의 부름(CoC) 7판 기본 시트 (v1.8 디자인)
+  - 직업기능점수 = 교육 × 4 / 관심기능점수 = 지능 × 2
+  - 기본값(기본 칸)은 수정 불가, 최종 = 기본 + 직업 + 관심 + 성장 (자동, 수정 불가)
+  - 모국어 기본값 = 교육, 회피 기본값 = 민첩 ÷ 2
+  - 입력 키(data-k)는 예전 시트와 같아서 저장해 둔 값이 그대로 보여요
+-->
+<style>
+:root {
+    --accent: #6f9a4c; --ink: #26262b; --sub: #8b8b93; --line: #e6e4ea; --soft: #f7f6f9;
+    --tint: rgba(111,154,76,.08); --tint2: rgba(111,154,76,.16); --tint3: rgba(111,154,76,.32);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #fff; color: var(--ink); font: 12px/1.45 "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; -webkit-font-smoothing: antialiased; }
+.sheet { width: 820px; overflow: hidden; background: #fff; }
+input, select { font: inherit; color: inherit; }
+input:disabled { opacity: 1; -webkit-text-fill-color: var(--ink); color: var(--ink); }
+.is-view ::placeholder { color: transparent; -webkit-text-fill-color: transparent; }
+
+
+/* ───────── 헤더 ───────── */
+.hd { position: relative; height: 136px; padding: 20px 26px 0; background: var(--accent) center / cover no-repeat; color: #fff; overflow: hidden; }
+.hd::before { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 1; background:
+    radial-gradient(120% 140% at 100% 0%, rgba(255,255,255,.22), transparent 55%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 1px, transparent 1px 9px); }
+.hd.has-img::before { background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.15) 65%, rgba(0,0,0,0)); }
+.hd > * { position: relative; z-index: 2; }
+.hd-top { display: flex; align-items: center; gap: 8px; }
+.tag { display: inline-flex; align-items: center; height: 22px; padding: 0 11px; border-radius: 99px; background: rgba(255,255,255,.95); color: var(--accent); font-size: 11px; font-weight: 900; letter-spacing: .14em; }
+.tag-sub { font-size: 10px; font-weight: 700; letter-spacing: .28em; opacity: .85; }
+.nm { margin: 10px 0 0; font-size: 36px; font-weight: 800; line-height: 1.08; letter-spacing: -.01em; text-shadow: 0 2px 10px rgba(0,0,0,.18); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sub { margin-top: 3px; font-size: 14px; font-weight: 600; letter-spacing: .04em; opacity: .92; }
+.hd-mark { position: absolute; right: 22px; bottom: -18px; z-index: 0; font-size: 96px; font-weight: 900; letter-spacing: -.04em; color: rgba(255,255,255,.12); pointer-events: none; }
+.hd.has-img .hd-mark { display: none; }
+
+/* ───────── 상단 : 두상 · 정보 · 능력치 ───────── */
+.top { display: grid; grid-template-columns: 200px 1fr; }
+.side { border-right: 1px solid var(--line); background: var(--soft); }
+.pt { position: relative; height: 252px; background: var(--tint2) center top / cover no-repeat; }
+.pt:not(.has-img)::before { content: "PORTRAIT"; position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .3em; opacity: .5; }
+.info { padding: 10px 12px 12px; }
+.info label { display: block; margin-bottom: 7px; }
+.info label:last-child { margin-bottom: 0; }
+.info .k { display: block; margin: 0 0 2px 2px; color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+.info .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.f { width: 100%; height: 27px; padding: 0 9px; border: 1px solid var(--line); border-radius: 7px; background: #fff; font-weight: 600; }
+.is-view .f { border-color: transparent; background: transparent; padding-left: 2px; }
+
+.main { display: flex; flex-direction: column; min-width: 0; }
+.stat { flex: 1; display: grid; grid-template-columns: 236px 1fr; }
+.sec-t { display: flex; align-items: center; gap: 6px; margin: 0 0 10px; color: var(--accent); font-size: 10px; font-weight: 900; letter-spacing: .26em; }
+.sec-t::after { content: ""; flex: 1; height: 1px; background: var(--tint3); }
+
+/* 체력 · 마력 · 이성 */
+.vit { display: flex; flex-direction: column; padding: 14px 16px 12px 18px; border-right: 1px solid var(--line); }
+.derived { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: auto; padding-top: 12px; }
+.derived div { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 2px 5px; border-radius: 9px; background: var(--soft); box-shadow: inset 0 0 0 1px var(--line); }
+.derived span { color: var(--sub); font-size: 9px; font-weight: 700; letter-spacing: .04em; white-space: nowrap; }
+.derived b { font-size: 14px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+.derived b:empty::before { content: "–"; color: #c9c7cf; }
+.vrow { display: grid; grid-template-columns: 44px 1fr 10px 1fr; align-items: center; gap: 6px; margin-bottom: 9px; }
+.vrow:last-of-type { margin-bottom: 0; }
+.vrow .slash { color: var(--sub); text-align: center; font-weight: 300; font-size: 15px; }
+.vcap { display: grid; grid-template-columns: 44px 1fr 10px 1fr; gap: 6px; margin-bottom: 3px; color: var(--sub); font-size: 9px; font-weight: 700; letter-spacing: .12em; text-align: center; }
+.lb { display: inline-flex; align-items: center; justify-content: center; height: 24px; padding: 0 8px; border-radius: 7px; background: var(--tint2); color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .02em; white-space: nowrap; }
+.ov { width: 100%; height: 30px; padding: 0; border: 1.5px solid var(--tint3); border-radius: 9px; background: #fff; text-align: center; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.vrow .ov.cur { border-color: var(--accent); }
+.is-view .ov { border-color: transparent; background: var(--tint); }
+.is-view .vrow .ov.cur { background: var(--tint2); }
+
+/* 능력치 9칸 */
+.chars { padding: 14px 18px 12px 16px; }
+.cgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.cbox { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 7px 4px 6px; border-radius: 11px; background: var(--tint); }
+.cbox .cn { color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .04em; }
+.cbox .ce { position: absolute; top: 6px; right: 8px; color: var(--accent); font-size: 8px; font-weight: 800; letter-spacing: .06em; opacity: .5; }
+.cbox .ov { width: 64px; height: 30px; font-size: 17px; }
+.is-view .cbox .ov { background: #fff; }
+.deco { position: relative; height: 104px; background: var(--accent) center / cover no-repeat; }
+.deco:not(.has-img) { background-image: radial-gradient(circle at 20% 120%, rgba(255,255,255,.25), transparent 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.1) 0 1px, transparent 1px 10px); }
+.deco:not(.has-img)::after { content: "✦  INVESTIGATOR  ✦"; position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.55); font-size: 11px; font-weight: 800; letter-spacing: .5em; }
+
+/* ───────── 기능 ───────── */
+.sk-title { display: flex; align-items: center; gap: 14px; padding: 16px 22px 12px; }
+.sk-title::before, .sk-title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--tint3)); }
+.sk-title::after { background: linear-gradient(90deg, var(--tint3), transparent); }
+.sk-title b { color: var(--ink); font-size: 16px; font-weight: 800; letter-spacing: .18em; }
+.sk-title small { color: var(--accent); font-size: 9px; font-weight: 800; letter-spacing: .3em; }
+.sk-title span { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.sk { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 14px; padding: 0 14px 14px; }
+.sk table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.sk th { height: 26px; padding: 0; background: var(--accent); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .04em; }
+.sk tr:first-child th:first-child { border-radius: 8px 0 0 8px; }
+.sk tr:first-child th:last-child { border-radius: 0 8px 8px 0; }
+.sk td { height: 25px; padding: 0 3px; border-bottom: 1px solid var(--line); text-align: center; font-size: 12px; font-variant-numeric: tabular-nums; }
+.sk tbody tr:nth-child(even) td { background: var(--soft); }
+.sk td.nm2 { text-align: left; padding-left: 5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sk td.b { color: var(--sub); }
+.sk td.t b { display: inline-block; min-width: 30px; padding: 1px 6px; border-radius: 99px; background: var(--tint2); color: var(--accent); font-weight: 800; }
+.sk td.t b:empty { display: none; }
+.sk .n { width: 100%; height: 20px; padding: 0; border: 1px solid var(--line); border-radius: 5px; text-align: center; font-size: 11px; background: #fff; }
+.sk .nmi { text-align: left; padding: 0 4px; font-weight: 600; }
+.sk tr.other th { height: 24px; background: var(--tint2); color: var(--accent); border-radius: 8px; letter-spacing: .2em; }
+.sk tr.other td { border: 0; height: 6px; }
+.ck { appearance: none; -webkit-appearance: none; width: 13px; height: 13px; margin: 0; border: 1.5px solid #c9c7cf; border-radius: 50%; vertical-align: middle; cursor: pointer; background: #fff; }
+.ck:checked { background: radial-gradient(circle, var(--accent) 42%, #fff 48%); border-color: var(--accent); }
+.is-view .ck { border-color: transparent; background: transparent; }
+.is-view .ck:checked { background: radial-gradient(circle, var(--accent) 40%, transparent 46%); }
+.is-view .sk .n { border-color: transparent; background: transparent; }
+
+/* ───────── 하단 합계 ───────── */
+.ft { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 12px 14px 14px; border-top: 1px solid var(--line); background: var(--soft); }
+.ft > div { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border-radius: 11px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); }
+.ft .k { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .06em; white-space: nowrap; }
+.ft .v { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ft .v small { color: var(--sub); font-size: 11px; font-weight: 500; }
+.ft > div.hl { background: var(--accent); box-shadow: none; }
+.ft > div.hl .k, .ft > div.hl .v { color: #fff; }
+.neg { color: #e5484d; }
+.ft > div.hl .neg { color: #fff; text-decoration: underline wavy rgba(255,255,255,.7); }
+
+/* 편집 모드 : 이미지 변경 버튼 */
+.avo-img-edit { cursor: default; }
+.avo-img-bar { position: absolute; right: 8px; bottom: 8px; left: 8px; z-index: 3; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; align-items: center; }
+.avo-img-bar button { padding: 4px 10px; border: 0; border-radius: 99px; background: rgba(20,20,24,.66); color: #fff; font: inherit; font-size: 10px; font-weight: 700; white-space: nowrap; cursor: pointer; }
+.avo-img-bar button:hover { background: rgba(20,20,24,.85); }
+.avo-img-bar small { order: -1; flex-basis: 100%; text-align: right; color: #fff; font-size: 9px; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+.is-edit .f:focus, .is-edit .n:focus, .is-edit .ov:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--tint2); }
+</style>
+
+<div class="sheet">
+    <header class="hd" data-img="header" data-ratio="" data-max="1600" data-hint="권장 820×136">
+        <div class="hd-top"><span class="tag">CoC 7th</span><span class="tag-sub">CALL OF CTHULHU</span></div>
+        <div class="nm" data-ctx="name"></div>
+        <div class="sub" data-ctx="nameSub"></div>
+        <div class="hd-mark" aria-hidden="true">CoC</div>
+    </header>
+
+    <div class="top">
+        <div class="side">
+            <div class="pt" data-img="portrait" data-fallback="thumb" data-ratio="3:4" data-max="600" data-hint="권장 600×800"></div>
+            <div class="info">
+                <label><span class="k">PLAYER · 플레이어</span><input class="f" data-k="player"></label>
+                <label><span class="k">OCCUPATION · 직업</span><input class="f" data-k="job"></label>
+                <div class="pair">
+                    <label><span class="k">성별</span><input class="f" data-k="sex"></label>
+                    <label><span class="k">나이</span><input class="f" data-k="age"></label>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="stat">
+                <div class="vit">
+                    <div class="sec-t">STATUS</div>
+                    <div class="vcap"><span></span><span>현재</span><span></span><span>최대</span></div>
+                    <div class="vrow"><b class="lb">체력</b><input class="ov cur" inputmode="numeric" data-k="hp"><span class="slash">/</span><input class="ov" inputmode="numeric" data-k="hp_max"></div>
+                    <div class="vrow"><b class="lb">마력</b><input class="ov cur" inputmode="numeric" data-k="mp"><span class="slash">/</span><input class="ov" inputmode="numeric" data-k="mp_max"></div>
+                    <div class="vrow"><b class="lb">이성</b><input class="ov cur" inputmode="numeric" data-k="san"><span class="slash">/</span><input class="ov" inputmode="numeric" data-k="san_max"></div>
+                    <!-- 자동 계산 (저장하지 않음) : 근력·민첩·크기·나이 기준 -->
+                    <div class="derived">
+                        <div><span>이동력 MOV</span><b id="d_mov"></b></div>
+                        <div><span>피해 보너스</span><b id="d_db"></b></div>
+                        <div><span>체구 BUILD</span><b id="d_build"></b></div>
+                    </div>
+                </div>
+                <div class="chars">
+                    <div class="sec-t">CHARACTERISTICS</div>
+                    <div class="cgrid">
+                        <label class="cbox"><span class="cn">근력</span><span class="ce">STR</span><input class="ov" inputmode="numeric" data-k="STR"></label>
+                        <label class="cbox"><span class="cn">민첩</span><span class="ce">DEX</span><input class="ov" inputmode="numeric" data-k="DEX"></label>
+                        <label class="cbox"><span class="cn">정신</span><span class="ce">POW</span><input class="ov" inputmode="numeric" data-k="POW"></label>
+                        <label class="cbox"><span class="cn">건강</span><span class="ce">CON</span><input class="ov" inputmode="numeric" data-k="CON"></label>
+                        <label class="cbox"><span class="cn">외모</span><span class="ce">APP</span><input class="ov" inputmode="numeric" data-k="APP"></label>
+                        <label class="cbox"><span class="cn">교육</span><span class="ce">EDU</span><input class="ov" inputmode="numeric" data-k="EDU"></label>
+                        <label class="cbox"><span class="cn">크기</span><span class="ce">SIZ</span><input class="ov" inputmode="numeric" data-k="SIZ"></label>
+                        <label class="cbox"><span class="cn">지능</span><span class="ce">INT</span><input class="ov" inputmode="numeric" data-k="INT"></label>
+                        <label class="cbox"><span class="cn">행운</span><span class="ce">LUCK</span><input class="ov" inputmode="numeric" data-k="LUCK"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="deco" data-img="deco" data-pixel="5" data-ratio="" data-max="1600" data-hint="권장 620×104"></div>
+        </div>
+    </div>
+
+    <div class="sk-title"><span><b>탐사자 기능</b><small>INVESTIGATOR SKILLS</small></span></div>
+    <div class="sk" id="sk"></div>
+
+    <div class="ft">
+        <div><span class="k">직업기능점수</span><span class="v" id="ft_job"></span></div>
+        <div><span class="k">관심기능점수</span><span class="v" id="ft_int"></span></div>
+        <div><span class="k">성장기능점수</span><span class="v" id="ft_grow"></span></div>
+        <div><span class="k">합계</span><span class="v" id="ft_sum"></span></div>
+        <div class="hl"><span class="k">잔여</span><span class="v" id="ft_left"></span></div>
+    </div>
+</div>
+
+<script>
+(function () {
+    // [키, 이름, 기본값]  기본값 'EDU' / 'DEX/2' 는 능력치에서 자동 계산
+    var COLS = [
+        [['appraise','감정',5],['archaeo','고고학',1],['spot','관찰력',25],['brawl','근접전(격투)',25],['mech','기계수리',10],['jump','도약',20],
+         ['listen','듣기',20],['fasttalk','말재주',5],['charm','매혹',15],['law','법률',5],['disguise','변장',5],['pistol','사격(권총)',20],
+         ['rifle','사격(라/산)',25],['persuade','설득',10],['sleight','손놀림',10],['swim','수영',20],['ride','승마',5],['psych','심리학',10]],
+        [['ownlang','모국어','EDU'],['history','역사',5],['lock','열쇠공',1],['climb','오르기',20],['occult','오컬트',5],['intim','위협',15],
+         ['stealth','은밀행동',20],['firstaid','응급처치',30],['medicine','의료',1],['anthro','인류학',1],['drive','자동차 운전',20],['library','자료조사',20],
+         ['natural','자연',10],['credit','재력',0],['elec','전기수리',10],['psychoan','정신분석',1],['heavy','중장비 조작',1],['track','추적',10]],
+        [['mythos','크툴루 신화',0],['throw','투척',20],['navigate','항법',10],['account','회계',5],['dodge','회피','DEX/2']]
+    ];
+    var OTHER = 12; // 다른 기능 칸 수
+    var ALL = COLS[0].concat(COLS[1], COLS[2]);      // 가나다 순서 그대로
+    var SPLIT = 27;                                    // 왼쪽 27개 / 오른쪽 나머지 + 다른 기능
+    var head = '<colgroup><col style="width:8%"><col style="width:30%"><col style="width:10%"><col style="width:13%"><col style="width:13%"><col style="width:13%"><col style="width:13%"></colgroup>'
+        + '<thead><tr><th>성장</th><th>기능 이름</th><th>기본</th><th>직업</th><th>관심</th><th>성장</th><th>최종</th></tr></thead><tbody>';
+    function num(k) { return '<input class="n" inputmode="numeric" data-k="' + k + '">'; }
+    function row(s) {
+        var id = s[0];
+        return '<tr><td><input type="checkbox" class="ck" data-k="' + id + '_c"></td><td class="nm2">' + s[1] + '</td>'
+            + '<td class="b" id="b_' + id + '"></td><td>' + num(id + '_j') + '</td><td>' + num(id + '_i') + '</td><td>' + num(id + '_g') + '</td>'
+            + '<td class="t"><b id="t_' + id + '"></b></td></tr>';
+    }
+    var html = '';
+    [ALL.slice(0, SPLIT), ALL.slice(SPLIT)].forEach(function (col, ci) {
+        html += '<div><table>' + head;
+        col.forEach(function (s) { html += row(s); });
+        if (ci === 1) {
+            html += '</tbody><tbody><tr class="other-gap"><td colspan="7" style="border:0;height:8px;background:none"></td></tr><tr class="other"><th colspan="7">다른 기능</th></tr>';
+            for (var o = 1; o <= OTHER; o++) {
+                var id = 'o' + o;
+                html += '<tr><td><input type="checkbox" class="ck" data-k="' + id + '_c"></td>'
+                    + '<td><input class="n nmi" data-k="' + id + '_n"></td><td>' + num(id + '_b') + '</td><td>' + num(id + '_j') + '</td>'
+                    + '<td>' + num(id + '_i') + '</td><td>' + num(id + '_g') + '</td><td class="t"><b id="t_' + id + '"></b></td></tr>';
+            }
+        }
+        html += '</tbody></table></div>';
+    });
+    document.getElementById('sk').innerHTML = html;
+
+    var S = window.AvoSheet;
+    // 캐릭터 테마 컬러로 옅은 색(--tint) 만들기
+    function tints() {
+        var c = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        var m = c.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i), r, g, b;
+        if (m) {
+            var h = m[1].length === 3 ? m[1].replace(/./g, '$&$&') : m[1];
+            r = parseInt(h.substr(0, 2), 16); g = parseInt(h.substr(2, 2), 16); b = parseInt(h.substr(4, 2), 16);
+        } else if ((m = c.match(/(\d+)\D+(\d+)\D+(\d+)/))) { r = +m[1]; g = +m[2]; b = +m[3]; } else return;
+        var st = document.documentElement.style;
+        st.setProperty('--tint', 'rgba(' + r + ',' + g + ',' + b + ',.08)');
+        st.setProperty('--tint2', 'rgba(' + r + ',' + g + ',' + b + ',.15)');
+        st.setProperty('--tint3', 'rgba(' + r + ',' + g + ',' + b + ',.35)');
+    }
+    S.onInit(tints);
+    function n(k) { return S.num(k); }
+    function txt(id, v) { var el = document.getElementById(id); if (el) el.innerHTML = v; }
+    function calc() {
+        var job = 0, intr = 0, grow = 0;
+        ALL.forEach(function (s) {
+            var id = s[0], base = s[2];
+            if (base === 'EDU') base = n('EDU');
+            else if (base === 'DEX/2') base = Math.floor(n('DEX') / 2);
+            var j = n(id + '_j'), i = n(id + '_i'), g = n(id + '_g');
+            job += j; intr += i; grow += g;
+            txt('b_' + id, base);
+            txt('t_' + id, base + j + i + g);
+        });
+        for (var o = 1; o <= OTHER; o++) {
+            var id = 'o' + o, b = n(id + '_b'), j = n(id + '_j'), i = n(id + '_i'), g = n(id + '_g');
+            job += j; intr += i; grow += g;
+            var has = (S.get(id + '_n') || '') !== '' || b || j || i || g;
+            txt('t_' + id, has ? b + j + i + g : '');
+        }
+        var jobMax = n('EDU') * 4, intMax = n('INT') * 2;
+        var left = (jobMax + intMax) - (job + intr);
+        txt('ft_job', job + ' <small>/ ' + jobMax + '</small>');
+        txt('ft_int', intr + ' <small>/ ' + intMax + '</small>');
+        txt('ft_grow', grow);
+        txt('ft_sum', job + intr + grow);
+        txt('ft_left', '<span class="' + (left < 0 ? 'neg' : '') + '">' + left + '</span>');
+        // 이동력 · 피해 보너스 · 체구 (자동 계산)
+        var str = n('STR'), dex = n('DEX'), siz = n('SIZ'), age = parseInt(String(S.get('age') || '').replace(/[^0-9]/g, ''), 10);
+        if (str && dex && siz) {
+            var mov = (dex < siz && str < siz) ? 7 : (dex > siz && str > siz) ? 9 : 8;
+            if (age >= 40) mov -= Math.min(5, Math.floor((age - 30) / 10));
+            txt('d_mov', mov);
+        } else txt('d_mov', '');
+        if (str && siz) {
+            var ss = str + siz, db, build;
+            if (ss <= 64) { db = '-2'; build = -2; }
+            else if (ss <= 84) { db = '-1'; build = -1; }
+            else if (ss <= 124) { db = '0'; build = 0; }
+            else if (ss <= 164) { db = '+1D4'; build = 1; }
+            else if (ss <= 204) { db = '+1D6'; build = 2; }
+            else { var ex = Math.ceil((ss - 204) / 80); db = '+' + (1 + ex) + 'D6'; build = 2 + ex; }
+            txt('d_db', db); txt('d_build', build > 0 ? '+' + build : build);
+        } else { txt('d_db', ''); txt('d_build', ''); }
+        // 체력·마력·이성 최대값 추천 (비어 있을 때 흐리게)
+        var hint = { hp_max: Math.floor((n('CON') + n('SIZ')) / 10), mp_max: Math.floor(n('POW') / 5), san_max: n('POW') };
+        Object.keys(hint).forEach(function (k) {
+            var el = document.querySelector('[data-k="' + k + '"]');
+            if (el) el.placeholder = hint[k] ? String(hint[k]) : '';
+        });
+    }
+    S.onChange(calc);
+})();
+</script>
